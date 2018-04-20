@@ -78,7 +78,6 @@ def installed() {
 
 def updated() {
     DEBUG("updated")
-	//unsubscribe()
 	initialize()
 }
 
@@ -87,14 +86,12 @@ def updated() {
 def initialize() {
     DEBUG("initialize")
 
-    // set up hourly schedule
-    //unschedule()
-    //unschedule(hourlyHandler)
-    //unschedule(turnFanOnForQuota)
-    //runEvery1Hour(hourlyHandler)
-    //schedule("15 01 * * * ?", hourlyHandler)
+    DEBUG("settings = ${settings}\n")
+
+    unschedule()
     schedule("58 58 * * * ?", hourlyHandler)
 
+    unsubscribe()
     subscribe (lightSwitch,    "switch.on",      lightHandler)
     subscribe (lightSwitch,    "switch.off",     lightHandler)
     subscribe (fanSwitch,      "switch.on",      fanOnHandler)
@@ -107,30 +104,45 @@ def initialize() {
 
 def lightHandler(evt) {
     DEBUG("lightHandler")
+    try {
+    } catch (e) {
+    }
 }
 
 //------------------------------------------------------------------------------
 
 def fanOnHandler(evt) {
     DEBUG("fanOnHandler")
+    try {
+    } catch (e) {
+    }
 }
 
 //------------------------------------------------------------------------------
 
 def fanOffHandler(evt) {
     DEBUG("fanOffHandler")
+    try {
+    } catch (e) {
+    }
 }
 
 //------------------------------------------------------------------------------
 
 def contactOpenHandler(evt) {
     DEBUG("contactOpenHandler")
+    try {
+    } catch (e) {
+    }
 }
 
 //------------------------------------------------------------------------------
 
 def contactCloseHandler(evt) {
     DEBUG("contactCloseHandler")
+    try {
+    } catch (e) {
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -140,63 +152,7 @@ def hourlyHandler(evt) {
     DEBUG("hourlyHandler:")
    
     try {
-        def curr_time    = now()
-        def counter      = 0
-        def cur          = new Date()
-        def hour_ago     = new Date()
-        def total_secs   = 0
-        use(TimeCategory) {
-            hour_ago = hour_ago - 1.hour
-        }
-        def last_event  = hour_ago
-    
-        DEBUG("  current date = ${cur}")
-        DEBUG("  current time = ${cur_time}")
-        DEBUG("  last hour    = ${hour_ago}")
-    
-    
-        // If fan switch is still on, then reset the last on time to now since we've already
-        // addressed this past hours runtime
-        if(fanSwitch.currentSwitch == "on") {
-            DEBUG("    fanswitch is on")
-        } else {
-            DEBUG("    fanswitch is NOT on")
-        }
-        
-        DEBUG("  --------------------------")
-        DEBUG("  ---- Old School Stuff ----")
-        DEBUG("  --------------------------")
-        for(zzz in fanSwitch.eventsSince(hour_ago).reverse()) {
-            if(zzz.value == "on" || zzz.value == "off") {
-                counter += 1
-                DEBUG("   EVENT: ${counter}")
-                DEBUG("       date            = ${zzz.date}")
-                //DEBUG("       name            = ${zzz.name}")
-                DEBUG("       device          = ${zzz.device.displayName}")
-                DEBUG("       description     = ${zzz.description}")
-                //DEBUG("       descriptionText = ${zzz.descriptionText}")
-                DEBUG("       state_change    = ${zzz.isStateChange()}")
-                //DEBUG("       physical        = ${zzz.isPhysical()}")
-                DEBUG("       value           = ${zzz.value}")
-                DEBUG("       source          = ${zzz.source}")
-
-                if(zzz.value == "off") {
-                    def seconds_since_last_mark = (zzz.date.getTime() - last_event.getTime()) / 1000
-                    total_secs += seconds_since_last_mark
-                    DEBUG("       seconds since l = ${seconds_since_last_mark}")
-                }
-
-                last_event = zzz.date
-            }
-        }
-        DEBUG("  --------------------------")
-        DEBUG("  -- End Old School Stuff --")
-        DEBUG("  --------------------------")
-    
     } catch(e) {
-        log.error("shit.  bad stuff in hourly handler...\n")
-        log.error("shit.  bad stuff in hourly handler...\n${e}")
-        DEBUG("shit.  bad stuff in hourly handler...\n${e}")
     }
     
     Dump_Debug()
